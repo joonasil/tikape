@@ -1,0 +1,2 @@
+# tikape
+Tietokantojen perusteiden ryhmätyö.

@@ -15,7 +15,7 @@ public class Main {
     
     public static void main(String[] args) throws Exception{
         
-        Database database = new Database("jdbc:sqlite:tikapeforum.db");
+        Database database = new Database("jdbc:sqlite:forum.db");
         Dao<Keskustelu, Integer> keskusteluDao = new KeskusteluDao(database);
         Dao<Viesti, String> viestiDao = new ViestiDao(database, keskusteluDao);
 

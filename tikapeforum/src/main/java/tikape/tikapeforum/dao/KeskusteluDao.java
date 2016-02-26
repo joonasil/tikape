@@ -49,4 +49,8 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     public void delete(Integer key) throws SQLException {
     }
     
+    @Override
+    public void insert(Integer key1, Integer key2) throws SQLException {
+    }
+    
 }

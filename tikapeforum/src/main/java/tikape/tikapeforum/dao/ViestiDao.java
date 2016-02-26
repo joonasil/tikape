@@ -76,4 +76,19 @@ public class ViestiDao implements Dao<Viesti, String> {
     public void delete(String key) throws SQLException {
     }
     
+    @Override
+    public void insert(String viesti, String nimimerkki) throws SQLException {
+        Connection connection = this.database.getConnection();
+        PreparedStatement stmt = 
+                connection.prepareStatement("INSERT INTO Viesti(keskusteluId, sisalto, nimimerkki, aika)"
+                                            + "VALUES(1,?,?,\"2016-26-02 09:25\")");
+        
+        stmt.setObject(1, viesti);
+        stmt.setObject(2, nimimerkki);
+        stmt.executeUpdate();
+        
+        stmt.close();
+        connection.close();
+    }
+    
 }

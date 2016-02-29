@@ -74,5 +74,9 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     @Override
     public void insert(Integer key1, Integer key2) throws SQLException {
     }
+
+    @Override
+    public void insert(Integer key) throws SQLException {
+    }
     
 }

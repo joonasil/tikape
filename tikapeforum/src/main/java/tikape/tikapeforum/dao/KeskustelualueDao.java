@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package tikape.tikapeforum.dao;
 
 import java.sql.Connection;
@@ -26,7 +22,7 @@ public class KeskustelualueDao implements Dao<Keskustelualue, String>{
     @Override
     public Keskustelualue findOne(String key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Alue WHERE nimi = ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelualue WHERE nimi = ?");
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -74,7 +70,21 @@ public class KeskustelualueDao implements Dao<Keskustelualue, String>{
 
     @Override
     public void insert(String key1, String key2) throws SQLException {
-        //ei toteutettu vielä
+        //refaktoroidaan alueen insertti myöhemmin
+    }
+
+    @Override
+    public void insert(String key) throws SQLException {
+        Connection connection = this.database.getConnection();
+        PreparedStatement stmt = 
+                connection.prepareStatement("INSERT INTO Keskustelualue(nimi)"
+                                            + "VALUES(?)");
+        
+        stmt.setObject(1, key);
+        stmt.executeUpdate();
+        
+        stmt.close();
+        connection.close();
     }
     
 }

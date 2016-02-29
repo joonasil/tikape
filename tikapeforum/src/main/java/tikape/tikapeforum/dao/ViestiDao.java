@@ -96,5 +96,11 @@ public class ViestiDao implements Dao<Viesti, String> {
         stmt.close();
         connection.close();
     }
+
+    @Override
+    public void insert(String key) throws SQLException {
+        
+        
+    }
     
 }

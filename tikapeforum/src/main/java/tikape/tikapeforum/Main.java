@@ -2,6 +2,7 @@
 package tikape.tikapeforum;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import tikape.tikapeforum.database.taulut.Keskustelu;
 import tikape.tikapeforum.database.taulut.Viesti;
@@ -50,10 +51,7 @@ public class Main {
                 } else {
                     alueJono += alue.getNimi() + " " + maara + " " + "<br/>";
                 }
-                
-                
-                
-                
+
             }
             
             return "<h2>Keskustelualueet:</h2>"
@@ -61,25 +59,22 @@ public class Main {
                    + alueJono
                    + "<br/>"
                    + "<form method=\"POST\" action=\"/\">\n"
-                   + "<p>Kirjoita viesti:</p>"
-                   + "<input type=\"text\" name=\"viesti\">\n"
-                   + "<p>Anna nimimerkki:</p>"
-                   + "<input type=\"text\" name=\"nimimerkki\">"
+                   + "<h2>Keskustelualueen lisäys:</h2>"
+                   + "<p>Anna alueen nimi:</p>"
+                   + "<input type=\"text\" name=\"alue\">\n"
                    + "<br/><br/>"
-                   + "<input type=\"submit\" value=\"Lisää viesti\">"
+                   + "<input type=\"submit\" value=\"Lisää alue\">"
                    + "<form>";
         });
         
         post("/", (req, res) -> {
             
-            String viesti = req.queryParams("viesti");
-            String nimim = req.queryParams("nimimerkki");
+            String alueNimi = req.queryParams("alue");
+            alueDao.insert(alueNimi);
+            alueet.add(alueDao.findOne(alueNimi));
             
-            viestiDao.insert(viesti, nimim);
-//            viestit.add(new Viesti(viesti, nimim));
-            
-            return "Viesti lähetetty!<br/><br/>"
-                    + "Palaa <a href=\"http://localhost:4567/viestit\">tietokannan viesteihin</a>";
+            return "Alue lisätty!<br/><br/>"
+                    + "Palaa <a href=\"http://localhost:4567/\">foorumiin</a>";
             
         });
         

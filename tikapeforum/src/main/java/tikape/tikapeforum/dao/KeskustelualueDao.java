@@ -9,9 +9,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import tikape.tikapeforum.database.Database;
 import tikape.tikapeforum.database.taulut.Keskustelualue;
+import tikape.tikapeforum.database.taulut.Viesti;
 
 public class KeskustelualueDao implements Dao<Keskustelualue, String>{
     
@@ -47,8 +49,22 @@ public class KeskustelualueDao implements Dao<Keskustelualue, String>{
 
     @Override
     public List<Keskustelualue> findAll() throws SQLException {
-        //ei toteutettu vielä
-        return null;
+        Connection connection = this.database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelualue");
+        ResultSet rs = stmt.executeQuery();
+        List<Keskustelualue> alue = new ArrayList();
+        while(rs.next()) {
+            Integer id = rs.getInt("alueId");
+            String nimi = rs.getString("nimi");
+            
+            alue.add(new Keskustelualue(id, nimi));
+        }
+        
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return alue;
     }
 
     @Override

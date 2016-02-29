@@ -5,7 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import tikape.tikapeforum.database.Database;
 import tikape.tikapeforum.database.taulut.Keskustelu;
@@ -37,16 +39,14 @@ public class ViestiDao implements Dao<Viesti, String> {
         
         String sisalto = rs.getString("sisalto");
         String nimim = rs.getString("nimimerkki");
+        int keskusteluId = rs.getInt("keskusteluId");
+        Timestamp aika = rs.getTimestamp("aika");
         
-        Viesti v = new Viesti(sisalto, nimim);
-        
-        int keskustelu = rs.getInt("keskusteluId");
-        
+        Viesti v = new Viesti(sisalto, nimim, keskusteluId, aika);
+                
         rs.close();
         stmt.close();
         connection.close();
-
-        v.lisaaKeskusteluun(this.keskusteluDao.findOne(keskustelu));
         
         return v;
     }
@@ -61,8 +61,10 @@ public class ViestiDao implements Dao<Viesti, String> {
         while(rs.next()) {
             String sisalto = rs.getString("sisalto");
             String nimim = rs.getString("nimimerkki");
+            int keskusteluId = rs.getInt("keskusteluId");
+            Timestamp aika = rs.getTimestamp("aika");
             
-            viestit.add(new Viesti(sisalto, nimim));
+            viestit.add(new Viesti(sisalto, nimim, keskusteluId, aika));
         }
         
         rs.close();
@@ -78,10 +80,14 @@ public class ViestiDao implements Dao<Viesti, String> {
     
     @Override
     public void insert(String viesti, String nimimerkki) throws SQLException {
+        
+        Date date= new Date();
+        Timestamp aika = new Timestamp(date.getTime());
+        
         Connection connection = this.database.getConnection();
         PreparedStatement stmt = 
                 connection.prepareStatement("INSERT INTO Viesti(keskusteluId, sisalto, nimimerkki, aika)"
-                                            + "VALUES(1,?,?,\"2016-26-02 09:25\")");
+                                            + "VALUES(1,?,?,\"" + aika +  "\")");
         
         stmt.setObject(1, viesti);
         stmt.setObject(2, nimimerkki);

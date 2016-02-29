@@ -1,15 +1,20 @@
 
 package tikape.tikapeforum.database.taulut;
 
+import java.sql.Timestamp;
+
 public class Viesti {
     
     private String sisalto;
     private String nimiMerkki;
-    private Keskustelu keskustelu;
+    private int keskusteluId;
+    private Timestamp aika;
     
-    public Viesti(String sisalto, String nimiMerkki) {
+    public Viesti(String sisalto, String nimiMerkki, int keskusteluId, Timestamp aika) {
         this.sisalto = sisalto;
         this.nimiMerkki = nimiMerkki;
+        this.keskusteluId = keskusteluId;
+        this.aika = aika;
     }
     
     public String getSisalto() {
@@ -28,8 +33,13 @@ public class Viesti {
         this.nimiMerkki = nimim;
     }
     
-    public void lisaaKeskusteluun(Keskustelu keskustelu) {
-        this.keskustelu = keskustelu;
+    public int getKeskusteluId() {
+        return this.keskusteluId;
     }
+    
+    public Timestamp getAika() {
+        return this.aika;
+    }
+    
     
 }

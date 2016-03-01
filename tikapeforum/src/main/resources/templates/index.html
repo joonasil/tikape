@@ -1,30 +1,43 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html style="height: 100%; margin: 0; padding: 0;" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
     
     <head>
         <title>TiKaPe Forum</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     </head>
-    <body>
+    <body style="height: 100%; margin: 0; padding: 0; background-color: #fff;">
         
-        <h1>Keskustelualueet:</h1>
-        <p>Alue Viestejä yhteensä Viimeisin viesti</p>
-        <ul>
-            <li th:each="alue: ${alueet}">
-                <span th:text="${alue.nimi}"></span>
-                <span th:text="${alue.viestienMaara}"></span>
-                <span th:text="${alue.viimeisinViesti}"></span>
-            </li>
-        </ul>
+        <div style="width: 100%; padding: 10px; margin-top: 0; margin-bottom: 20px; background-color: #000; text-align: center">
+            <h1 style="color: #fff">TiKaPe Forum</h1>  
+        </div>
         
-        <form method="POST" action="/">
-            <h1>Keskustelualueen lisäys:</h1>
-            <p>Anna alueen nimi:</p>
-            <input type="text" name="alue"></input>
-            <input type="submit" value="Lisää alue"></input>
-        </form>
+        <div style="box-shadow: 2px 2px 2px 2px #888888; width: 60%; margin: 0 auto; padding: 20px;">
+            
+            <table style="width: 90%; padding: 5px; margin: 0 auto;">
+                <tr>
+                    <td><h3>Alue</h3></td>
+                    <td><h3>Viestejä yhteensä</h3></td>
+                    <td><h3>Viimeisin viesti</h3></td>
+                </tr>
+                <tr th:each="alue: ${alueet}">
+                    <td th:text="${alue.nimi}"></td>
+                    <td th:text="${alue.viestienMaara}"></td>
+                    <td th:text="${alue.viimeisinViesti}"></td>
+                </tr>
+            </table>
+            
+            <div style="width: 90%; margin: 0 auto; padding-bottom: 20px; padding-top: 20px;">
+                <form method="POST" action="/">
+                    <h1>Keskustelualueen lisäys:</h1>
+                    <p>Anna alueen nimi:</p>
+                    <input type="text" name="alue"></input>
+                    <input type="submit" value="Lisää alue"></input>
+                </form>
+            </div>
+            
+        </div>
             
     </body>
     

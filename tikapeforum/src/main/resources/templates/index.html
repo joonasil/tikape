@@ -7,19 +7,19 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     </head>
-    <body style="height: 100%; margin: 0; padding: 0; background-color: #fff;">
+    <body style="height: 100%; margin: 0; padding: 0; background-color: #f1f1f1;">
         
         <div style="width: 100%; padding: 10px; margin-top: 0; margin-bottom: 20px; background-color: #000; text-align: center">
             <h1 style="color: #fff">TiKaPe Forum</h1>  
         </div>
         
-        <div style="box-shadow: 2px 2px 2px 2px #888888; width: 60%; margin: 0 auto; padding: 20px;">
+        <div style="background-color: #ffffff; box-shadow: 1px 1px 1px 1px #888888; width: 60%; margin: 0 auto; padding: 20px;">
             
             <table style="width: 90%; padding: 5px; margin: 0 auto;">
                 <tr>
-                    <td><h3>Alue</h3></td>
-                    <td><h3>Viestejä yhteensä</h3></td>
-                    <td><h3>Viimeisin viesti</h3></td>
+                    <td><h2>Alue</h2></td>
+                    <td><h2>Viestejä yhteensä</h2></td>
+                    <td><h2>Viimeisin viesti</h2></td>
                 </tr>
                 <tr th:each="alue: ${alueet}">
                     <td th:text="${alue.nimi}"></td>
@@ -30,7 +30,7 @@
             
             <div style="width: 90%; margin: 0 auto; padding-bottom: 20px; padding-top: 20px;">
                 <form method="POST" action="/">
-                    <h1>Keskustelualueen lisäys:</h1>
+                    <h2>Keskustelualueen lisäys:</h2>
                     <p>Anna alueen nimi:</p>
                     <input type="text" name="alue"></input>
                     <input type="submit" value="Lisää alue"></input>

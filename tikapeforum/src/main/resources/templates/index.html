@@ -1,0 +1,31 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    
+    <head>
+        <title>TiKaPe Forum</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    </head>
+    <body>
+        
+        <h1>Keskustelualueet:</h1>
+        <p>Alue Viestejä yhteensä Viimeisin viesti</p>
+        <ul>
+            <li th:each="alue: ${alueet}">
+                <span th:text="${alue.nimi}"></span>
+                <span th:text="${alue.viestienMaara}"></span>
+                <span th:text="${alue.viimeisinViesti}"></span>
+            </li>
+        </ul>
+        
+        <form method="POST" action="/">
+            <h1>Keskustelualueen lisäys:</h1>
+            <p>Anna alueen nimi:</p>
+            <input type="text" name="alue"></input>
+            <input type="submit" value="Lisää alue"></input>
+        </form>
+            
+    </body>
+    
+</html>

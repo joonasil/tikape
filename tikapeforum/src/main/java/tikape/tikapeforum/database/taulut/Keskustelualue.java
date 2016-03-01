@@ -6,9 +6,11 @@ import java.util.*;
 
 public class Keskustelualue {
     
-    private Integer id;
+    private int id;
     private String nimi;
     private List<Keskustelu> keskustelut;
+    private int viestienMaara;
+    private Timestamp viimeisinViesti;
 
     public Keskustelualue(Integer alueId, String nimi) {
         this.id = alueId;
@@ -40,7 +42,15 @@ public class Keskustelualue {
         return this.keskustelut;
     }
     
+    public int getViestienMaara() {
+        return this.viestienMaara;
+    }
+    
     public Timestamp getViimeisinViesti() {
+        return this.viimeisinViesti;
+    }
+    
+    public void selvitaViimeisinViesti() {
         
         Timestamp viimeisin = null;
         for (Keskustelu k : this.keskustelut) {
@@ -58,7 +68,15 @@ public class Keskustelualue {
             
         }
         
-        return viimeisin;
+        this.viimeisinViesti = viimeisin;
+    }
+    
+    public void selvitaViestienMaara() {
+        int maara = 0;
+        for (Keskustelu k : this.keskustelut) {
+            maara += k.getViestit().size();
+        }
+        this.viestienMaara = maara;
     }
     
 }

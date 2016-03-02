@@ -1,4 +1,3 @@
-
 package tikape.tikapeforum;
 
 import java.sql.Timestamp;
@@ -21,10 +20,11 @@ import tikape.tikapeforum.yhdistajat.AlueYhdistaja;
 import tikape.tikapeforum.yhdistajat.KeskusteluYhdistaja;
 
 public class Main {
-    public static void main(String[] args) throws Exception{
-        
+
+    public static void main(String[] args) throws Exception {
+
         Database database = new Database("jdbc:sqlite:forum.db");
-        
+
         Dao<Keskustelualue, String> alueDao = new KeskustelualueDao(database);
         Dao<Keskustelu, Integer> keskusteluDao = new KeskusteluDao(database);
         Dao<Viesti, String> viestiDao = new ViestiDao(database, keskusteluDao);
@@ -32,41 +32,40 @@ public class Main {
         List<Keskustelualue> alueet = alueDao.findAll();
         List<Keskustelu> keskustelut = keskusteluDao.findAll();
         List<Viesti> viestit = viestiDao.findAll();
-        
+
         KeskusteluYhdistaja k = new KeskusteluYhdistaja(keskustelut, viestit);
         k.yhdista();
-        
-        AlueYhdistaja a= new AlueYhdistaja(alueet, keskustelut);
+
+        AlueYhdistaja a = new AlueYhdistaja(alueet, keskustelut);
         a.yhdista();
-                
+
         get("/", (req, res) -> {
-            
+
             HashMap map = new HashMap();
             ArrayList alueLista = new ArrayList();
-            
+
             for (Keskustelualue alue : alueet) {
                 alue.selvitaViestienMaara();
                 alue.selvitaViimeisinViesti();
                 alueLista.add(alue);
             }
-            
+
             map.put("alueet", alueLista);
-            
+
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());;
-        
+
         post("/", (req, res) -> {
-            
+
             String alueNimi = req.queryParams("alue");
             alueDao.insert(alueNimi);
             alueet.add(alueDao.findOne(alueNimi));
-            
+
             return "Alue lisätty!<br/><br/>"
                     + "Palaa <a href=\"http://localhost:4567/\">keskustelufoorumiin.</a>";
-            
+
         });
-        
+
     }
 
-    
 }

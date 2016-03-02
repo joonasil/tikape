@@ -1,4 +1,3 @@
-
 package tikape.tikapeforum.dao;
 
 import java.sql.Connection;
@@ -14,10 +13,10 @@ import tikape.tikapeforum.database.taulut.Keskustelu;
 import tikape.tikapeforum.database.taulut.Viesti;
 
 public class ViestiDao implements Dao<Viesti, String> {
-    
+
     private Database database;
     private Dao<Keskustelu, Integer> keskusteluDao;
-    
+
     public ViestiDao(Database db, Dao<Keskustelu, Integer> kd) {
         this.database = db;
         this.keskusteluDao = kd;
@@ -25,10 +24,10 @@ public class ViestiDao implements Dao<Viesti, String> {
 
     @Override
     public Viesti findOne(String key) throws SQLException {
-        
+
         Connection connection = this.database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE nimimerkki LIKE ?");
-        
+
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -36,37 +35,37 @@ public class ViestiDao implements Dao<Viesti, String> {
         if (!hasOne) {
             return null;
         }
-        
+
         String sisalto = rs.getString("sisalto");
         String nimim = rs.getString("nimimerkki");
         int keskusteluId = rs.getInt("keskusteluId");
         Timestamp aika = rs.getTimestamp("aika");
-        
+
         Viesti v = new Viesti(sisalto, nimim, keskusteluId, aika);
-                
+
         rs.close();
         stmt.close();
         connection.close();
-        
+
         return v;
     }
-    
+
     @Override
     public List findAll() throws SQLException {
         Connection connection = this.database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti");
-        
+
         ResultSet rs = stmt.executeQuery();
         List<Viesti> viestit = new ArrayList();
-        while(rs.next()) {
+        while (rs.next()) {
             String sisalto = rs.getString("sisalto");
             String nimim = rs.getString("nimimerkki");
             int keskusteluId = rs.getInt("keskusteluId");
             Timestamp aika = rs.getTimestamp("aika");
-            
+
             viestit.add(new Viesti(sisalto, nimim, keskusteluId, aika));
         }
-        
+
         rs.close();
         stmt.close();
         connection.close();
@@ -77,30 +76,23 @@ public class ViestiDao implements Dao<Viesti, String> {
     @Override
     public void delete(String key) throws SQLException {
     }
-    
+
     @Override
-    public void insert(String viesti, String nimimerkki) throws SQLException {
-        
-        Date date= new Date();
+    public void insert(String... keys) throws SQLException {
+
+        Date date = new Date();
         Timestamp aika = new Timestamp(date.getTime());
-        
+
         Connection connection = this.database.getConnection();
-        PreparedStatement stmt = 
-                connection.prepareStatement("INSERT INTO Viesti(keskusteluId, sisalto, nimimerkki, aika)"
-                                            + "VALUES(1,?,?,\"" + aika +  "\")");
-        
-        stmt.setObject(1, viesti);
-        stmt.setObject(2, nimimerkki);
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(keskusteluId, sisalto, nimimerkki, aika)"
+                + "VALUES(1,?,?,\"" + aika + "\")");
+
+        stmt.setObject(1, keys[0]);
+        stmt.setObject(2, keys[1]);
         stmt.executeUpdate();
-        
+
         stmt.close();
         connection.close();
     }
 
-    @Override
-    public void insert(String key) throws SQLException {
-        
-        
-    }
-    
 }

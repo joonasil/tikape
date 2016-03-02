@@ -1,4 +1,3 @@
-
 package tikape.tikapeforum.dao;
 
 import java.sql.Connection;
@@ -11,10 +10,10 @@ import tikape.tikapeforum.database.Database;
 import tikape.tikapeforum.database.taulut.Keskustelualue;
 import tikape.tikapeforum.database.taulut.Viesti;
 
-public class KeskustelualueDao implements Dao<Keskustelualue, String>{
-    
+public class KeskustelualueDao implements Dao<Keskustelualue, String> {
+
     private Database database;
-    
+
     public KeskustelualueDao(Database database) {
         this.database = database;
     }
@@ -49,13 +48,13 @@ public class KeskustelualueDao implements Dao<Keskustelualue, String>{
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelualue");
         ResultSet rs = stmt.executeQuery();
         List<Keskustelualue> alue = new ArrayList();
-        while(rs.next()) {
+        while (rs.next()) {
             Integer id = rs.getInt("alueId");
             String nimi = rs.getString("nimi");
-            
+
             alue.add(new Keskustelualue(id, nimi));
         }
-        
+
         rs.close();
         stmt.close();
         connection.close();
@@ -69,22 +68,17 @@ public class KeskustelualueDao implements Dao<Keskustelualue, String>{
     }
 
     @Override
-    public void insert(String key1, String key2) throws SQLException {
-        //refaktoroidaan alueen insertti myöhemmin
-    }
-
-    @Override
-    public void insert(String key) throws SQLException {
+    public void insert(String... key) throws SQLException {
         Connection connection = this.database.getConnection();
-        PreparedStatement stmt = 
-                connection.prepareStatement("INSERT INTO Keskustelualue(nimi)"
-                                            + "VALUES(?)");
-        
-        stmt.setObject(1, key);
+        PreparedStatement stmt
+                = connection.prepareStatement("INSERT INTO Keskustelualue(nimi)"
+                        + "VALUES(?)");
+
+        stmt.setObject(1, key[0]);
         stmt.executeUpdate();
-        
+
         stmt.close();
         connection.close();
     }
-    
+
 }

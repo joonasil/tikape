@@ -1,4 +1,3 @@
-
 package tikape.tikapeforum.dao;
 
 import java.sql.Connection;
@@ -14,11 +13,11 @@ import tikape.tikapeforum.database.taulut.Keskustelualue;
 public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
     private Database database;
-    
+
     public KeskusteluDao(Database database) {
         this.database = database;
     }
-    
+
     @Override
     public Keskustelu findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
@@ -50,16 +49,16 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelu");
         ResultSet rs = stmt.executeQuery();
         List<Keskustelu> keskustelu = new ArrayList();
-        
-        while(rs.next()) {
-            
+
+        while (rs.next()) {
+
             Integer id = rs.getInt("keskusteluId");
             String otsikko = rs.getString("otsikko");
             Integer alueId = rs.getInt("alueId");
-            
+
             keskustelu.add(new Keskustelu(otsikko, id, alueId));
         }
-        
+
         rs.close();
         stmt.close();
         connection.close();
@@ -70,13 +69,19 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     @Override
     public void delete(Integer key) throws SQLException {
     }
-    
-    @Override
-    public void insert(Integer key1, Integer key2) throws SQLException {
-    }
+
 
     @Override
-    public void insert(Integer key) throws SQLException {
+    public void insert(String...key) throws SQLException {
+        Connection connection = this.database.getConnection();
+        PreparedStatement stmt
+                = connection.prepareStatement("INSERT INTO Keskustelu(alueId,otsikko)"
+                        + "VALUES(1,?)");
+
+        stmt.setObject(1, key[0]);
+        stmt.executeUpdate();
+
+        stmt.close();
+        connection.close();
     }
-    
 }

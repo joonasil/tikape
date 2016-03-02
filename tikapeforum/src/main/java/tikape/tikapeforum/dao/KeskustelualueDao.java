@@ -68,13 +68,13 @@ public class KeskustelualueDao implements Dao<Keskustelualue, String> {
     }
 
     @Override
-    public void insert(String... key) throws SQLException {
+    public void insert(String... nimi) throws SQLException {
         Connection connection = this.database.getConnection();
         PreparedStatement stmt
                 = connection.prepareStatement("INSERT INTO Keskustelualue(nimi)"
                         + "VALUES(?)");
 
-        stmt.setObject(1, key[0]);
+        stmt.setObject(1, nimi[0]);
         stmt.executeUpdate();
 
         stmt.close();

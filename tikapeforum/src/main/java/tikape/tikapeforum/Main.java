@@ -55,6 +55,22 @@ public class Main {
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());;
 
+        get("/keskustelut", (req, res) -> {
+
+            HashMap map = new HashMap();
+            ArrayList keskusteluLista = new ArrayList();
+
+            for (Keskustelu keskustelu : keskustelut) {
+                keskustelu.getViestit().size();
+                keskustelu.getViimeisin();
+                keskusteluLista.add(keskustelu);
+            }
+
+            map.put("keskustelut", keskusteluLista);
+
+            return new ModelAndView(map, "keskustelut");
+        }, new ThymeleafTemplateEngine());;
+
         post("/", (req, res) -> {
 
             String alueNimi = req.queryParams("alue");

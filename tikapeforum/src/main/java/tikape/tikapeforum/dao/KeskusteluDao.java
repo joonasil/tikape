@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import tikape.tikapeforum.database.*;
 import tikape.tikapeforum.database.taulut.Keskustelu;
 import tikape.tikapeforum.database.taulut.Keskustelualue;
+import tikape.tikapeforum.database.taulut.Viesti;
 
 public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
@@ -70,9 +73,8 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     public void delete(Integer key) throws SQLException {
     }
 
-
     @Override
-    public void insert(String...otsikko) throws SQLException {
+    public void insert(String... otsikko) throws SQLException {
         Connection connection = this.database.getConnection();
         PreparedStatement stmt
                 = connection.prepareStatement("INSERT INTO Keskustelu(alueId,otsikko)"

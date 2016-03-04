@@ -1,6 +1,5 @@
 package tikape.tikapeforum;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,48 +37,77 @@ public class Main {
 
         AlueYhdistaja a = new AlueYhdistaja(alueet, keskustelut);
         a.yhdista();
-
+        
+        
+        // KESKUSTELUALUEIDEN LISTAUS JA LISÄYS
         get("/", (req, res) -> {
 
             HashMap map = new HashMap();
             ArrayList alueLista = new ArrayList();
 
+            // Valitaan näytettäviksi kaikki keskustelualueet
             for (Keskustelualue alue : alueet) {
                 alue.selvitaViestienMaara();
                 alue.selvitaViimeisinViesti();
                 alueLista.add(alue);
             }
-
+            
+            // Laitetaan tiedot mappiin ja annetaan thymeleafille
             map.put("alueet", alueLista);
 
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());;
-
-        get("/keskustelut", (req, res) -> {
-
-            HashMap map = new HashMap();
-            ArrayList keskusteluLista = new ArrayList();
-
-            for (Keskustelu keskustelu : keskustelut) {
-                keskustelu.getViestit().size();
-                keskustelu.getViimeisin();
-                keskusteluLista.add(keskustelu);
-            }
-
-            map.put("keskustelut", keskusteluLista);
-
-            return new ModelAndView(map, "keskustelut");
-        }, new ThymeleafTemplateEngine());;
-
+        
+        // Lisätään annettujen tietojen mukainen keskustelualue ja palataan
+        // foorumin pääsivulle
         post("/", (req, res) -> {
 
             String alueNimi = req.queryParams("alue");
             alueDao.insert(alueNimi);
             alueet.add(alueDao.findOne(alueNimi));
+            
+            res.redirect("/");
+            return "";
+        });
+        
+        
+        // KESKUSTELUALUEELLA OLEVIEN KESKUSTELUJEN LISTAUS JA LISÄYS
+        get("/alue/:id", (req, res) -> {
+            
+            HashMap map = new HashMap();
+            ArrayList keskusteluLista = new ArrayList();
 
-            return "Alue lisätty!<br/><br/>"
-                    + "Palaa <a href=\"http://localhost:4567/\">keskustelufoorumiin.</a>";
+            // Muodostetaan keskustelualueen nimi otsikoksi html-templateen
+            String alueNimi = "Keskustelualue: ";
+            int alueId = Integer.parseInt(req.params(":id"));
+            for (Keskustelualue alue : alueet) {
+                if (alue.getId() == alueId) {
+                    alueNimi += alue.getNimi();
+                }
+            }
+            
+            // Valitaan näytettäviksi vain ne keskustelut,
+            // joiden alueId vastaa valittua aluetta
+            for (Keskustelu keskustelu : keskustelut) {
+                if (keskustelu.getAlueId() == alueId) {
+                    keskustelu.getViestit().size();
+                    keskustelu.getViimeisin();
+                    keskusteluLista.add(keskustelu); 
+                }
+            }
+            
+            // Laitetaan tiedot mappiin ja annetaan thymeleafille
+            map.put("alue", alueNimi);
+            map.put("keskustelut", keskusteluLista);
 
+            return new ModelAndView(map, "keskustelualue");
+        }, new ThymeleafTemplateEngine());;
+        
+        // Tämä ei tee vielä mitään muuta kuin ohjaa takaisin keskustelualueen sivulle
+        post("/alue/:id", (req, res) -> {
+           
+            res.redirect("/alue/:id");
+            return ""; 
         });
 
     }

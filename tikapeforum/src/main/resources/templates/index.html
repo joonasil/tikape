@@ -17,12 +17,12 @@
             
             <table style="width: 90%; padding: 5px; margin: 0 auto;">
                 <tr>
-                    <td><h2>Alue</h2></td>
+                    <td><h2>Keskustelualue</h2></td>
                     <td><h2>Viestejä yhteensä</h2></td>
                     <td><h2>Viimeisin viesti</h2></td>
                 </tr>
                 <tr th:each="alue: ${alueet}">
-                    <td><a th:text="${alue.nimi}" th:href="@{http://localhost:4567/alue/} + ${alue.id}"></a></td>
+                    <td><a th:text="${alue.nimi}" th:href="@{~/alue/} + ${alue.id}"></a></td>
                     <td th:text="${alue.viestienMaara}"></td>
                     <td th:text="${alue.viimeisinViesti}"></td>
                 </tr>

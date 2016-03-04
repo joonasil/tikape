@@ -78,7 +78,7 @@ public class ViestiDao implements Dao<Viesti, String> {
     }
 
     @Override
-    public void insert(String... keys) throws SQLException {
+    public int insert(String... keys) throws SQLException {
 
         Date date = new Date();
         Timestamp aika = new Timestamp(date.getTime());
@@ -93,6 +93,8 @@ public class ViestiDao implements Dao<Viesti, String> {
 
         stmt.close();
         connection.close();
+        
+        return 0;
     }
 
 }

@@ -97,16 +97,20 @@ public class Main {
             }
             
             // Laitetaan tiedot mappiin ja annetaan thymeleafille
+            map.put("alueId", alueId);
             map.put("alue", alueNimi);
             map.put("keskustelut", keskusteluLista);
 
             return new ModelAndView(map, "keskustelualue");
         }, new ThymeleafTemplateEngine());;
         
-        // Tämä ei tee vielä mitään muuta kuin ohjaa takaisin keskustelualueen sivulle
+        // lisätään alueelle viesti ja palataan keskustelualueen sivulle
         post("/alue/:id", (req, res) -> {
-           
-            res.redirect("/alue/:id");
+            
+            int uudenId = keskusteluDao.insert(req.params(":id"), req.queryParams("otsikko"));
+            keskustelut.add(keskusteluDao.findOne(uudenId));
+            
+            res.redirect("/alue/" + req.params(":id"));
             return ""; 
         });
 

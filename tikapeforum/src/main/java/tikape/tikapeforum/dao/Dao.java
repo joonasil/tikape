@@ -13,5 +13,5 @@ public interface Dao<T, K> {
     void delete(K key) throws SQLException;
     
     //Insertit tarvii aina Stringejä, tässä yksi tai enempi.
-    void insert(String...keys) throws SQLException;
+    int insert(String...keys) throws SQLException;    
 }

@@ -17,6 +17,7 @@
             
             <div style="width: 90%; margin: 0 auto;">
                 <h1><em th:text="${alue}"></em></h1>
+                <a href="/">Palaa keskustelufoorumin pääsivulle</a>
             </div>
             
             <table style="width: 90%; padding: 5px; margin: 0 auto;">
@@ -33,8 +34,8 @@
             </table>
             
             <div style="width: 90%; margin: 0 auto; padding-bottom: 20px; padding-top: 20px;">
-                <form method="POST" action="/">
-                    <h2>Keskustelun lisäys:</h2>
+                <form method="POST" th:action="@{~/alue/} + ${alueId}">
+                    <h2>Keskustelun lisäys</h2>
                     <p>Anna otsikko:</p>
                     <input type="text" name="otsikko"></input>
                     <input type="submit" value="Lisää keskustelu"></input>

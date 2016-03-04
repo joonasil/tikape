@@ -74,16 +74,22 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     }
 
     @Override
-    public void insert(String... otsikko) throws SQLException {
+    public int insert(String... otsikko) throws SQLException {
         Connection connection = this.database.getConnection();
         PreparedStatement stmt
-                = connection.prepareStatement("INSERT INTO Keskustelu(alueId,otsikko)"
-                        + "VALUES(1,?)");
-
-        stmt.setObject(1, otsikko[0]);
+                = connection.prepareStatement("INSERT INTO Keskustelu(alueId, otsikko)"
+                        + "VALUES(?, ?)");
+        
+        stmt.setObject(1, Integer.parseInt(otsikko[0]));
+        stmt.setObject(2, otsikko[1]);
         stmt.executeUpdate();
-
+        
+        ResultSet rs = stmt.getGeneratedKeys();
+        int uudenId = rs.getInt(1);
+        
         stmt.close();
         connection.close();
+        
+        return uudenId;
     }
 }

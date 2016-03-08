@@ -78,5 +78,8 @@ public class Keskustelualue {
         }
         this.viestienMaara = maara;
     }
+    public void clear() {
+        this.keskustelut.clear();
+    }
     
 }

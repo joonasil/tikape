@@ -20,6 +20,12 @@ import tikape.tikapeforum.yhdistajat.KeskusteluYhdistaja;
 
 public class Main {
 
+    public static void paivita(KeskusteluYhdistaja k, AlueYhdistaja a) {
+        k.yhdista();
+        a.yhdista();
+
+    }
+
     public static void main(String[] args) throws Exception {
 
         Database database = new Database("jdbc:sqlite:forum.db");
@@ -33,10 +39,8 @@ public class Main {
         List<Viesti> viestit = viestiDao.findAll();
 
         KeskusteluYhdistaja k = new KeskusteluYhdistaja(keskustelut, viestit);
-        k.yhdista();
-
         AlueYhdistaja a = new AlueYhdistaja(alueet, keskustelut);
-        a.yhdista();
+        paivita(k, a);
 
         // KESKUSTELUALUEIDEN LISTAUS JA LISÄYS
         get("/", (req, res) -> {
@@ -64,7 +68,7 @@ public class Main {
             String alueNimi = req.queryParams("alue");
             alueDao.insert(alueNimi);
             alueet.add(alueDao.findOne(alueNimi));
-
+            paivita(k, a);
             res.redirect("/");
             return "";
         });
@@ -107,7 +111,7 @@ public class Main {
 
             int uudenId = keskusteluDao.insert(req.params(":id"), req.queryParams("otsikko"));
             keskustelut.add(keskusteluDao.findOne(uudenId));
-
+            paivita(k, a);
             res.redirect("/alue/" + req.params(":id"));
             return "";
         });
@@ -151,10 +155,10 @@ public class Main {
 
             String uudenSisalto = viestiDao.insert1(req.params(":id"), req.queryParams("sisalto"), req.queryParams("nimimerkki"));
             viestit.add(viestiDao.findOne(uudenSisalto));
-
+            paivita(k, a);
             res.redirect("/keskustelu/" + req.params(":id"));
             return "";
         });
-
+        
     }
 }

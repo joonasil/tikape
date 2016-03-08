@@ -62,5 +62,8 @@ public class Keskustelu {
         
         return viimeisin;
     }
+    public void clear(){
+        this.viestit.clear();
+    }
     
 }

@@ -10,7 +10,7 @@ import tikape.tikapeforum.database.Database;
 import tikape.tikapeforum.database.taulut.Keskustelualue;
 import tikape.tikapeforum.database.taulut.Viesti;
 
-public class KeskustelualueDao implements Dao<Keskustelualue, String> {
+public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
 
     private Database database;
 
@@ -19,9 +19,9 @@ public class KeskustelualueDao implements Dao<Keskustelualue, String> {
     }
 
     @Override
-    public Keskustelualue findOne(String key) throws SQLException {
+    public Keskustelualue findOne(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelualue WHERE nimi = ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelualue WHERE alueId = ?");
         stmt.setObject(1, key);
 
         ResultSet rs = stmt.executeQuery();
@@ -63,11 +63,6 @@ public class KeskustelualueDao implements Dao<Keskustelualue, String> {
     }
 
     @Override
-    public void delete(String key) throws SQLException {
-        //ei toteutettu vielä
-    }
-
-    @Override
     public int insert(String... nimi) throws SQLException {
         Connection connection = this.database.getConnection();
         PreparedStatement stmt
@@ -77,10 +72,13 @@ public class KeskustelualueDao implements Dao<Keskustelualue, String> {
         stmt.setObject(1, nimi[0]);
         stmt.executeUpdate();
 
+        ResultSet rs = stmt.getGeneratedKeys();
+        int uudenId = rs.getInt(1);
+
         stmt.close();
         connection.close();
-        
-        return 0;
+
+        return uudenId;
     }
 
     @Override

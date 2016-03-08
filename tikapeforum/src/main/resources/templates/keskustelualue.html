@@ -37,7 +37,11 @@
                 <form method="POST" th:action="@{~/alue/} + ${alueId}">
                     <h2>Keskustelun lisäys</h2>
                     <p>Anna otsikko:</p>
-                    <input type="text" name="otsikko"></input>
+                    <input required="required" type="text" name="otsikko"></input>
+                    <p>Anna keskustelunavaus:</p>
+                    <input required="required" type="text" name="sisalto"></input>
+                    <p>Anna nimimerkki</p>
+                    <input required="required" type="text" name="nimimerkki"></input>
                     <input type="submit" value="Lisää keskustelu"></input>
                 </form>
             </div>

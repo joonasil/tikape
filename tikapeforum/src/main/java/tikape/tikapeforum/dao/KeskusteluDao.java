@@ -70,19 +70,6 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     }
 
     @Override
-    public void delete(Integer key) throws SQLException {
-        Connection connection = this.database.getConnection();
-        PreparedStatement stmt
-                = connection.prepareStatement("DROP INDEX ? ON Keskustelu");
-
-        stmt.setObject(1, (key));
-        stmt.executeUpdate();
-
-        stmt.close();
-        connection.close();
-    }
-
-    @Override
     public int insert(String... otsikko) throws SQLException {
         Connection connection = this.database.getConnection();
         PreparedStatement stmt

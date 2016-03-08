@@ -30,7 +30,7 @@ public class Main {
 
         Database database = new Database("jdbc:sqlite:forum.db");
 
-        Dao<Keskustelualue, String> alueDao = new KeskustelualueDao(database);
+        Dao<Keskustelualue, Integer> alueDao = new KeskustelualueDao(database);
         Dao<Keskustelu, Integer> keskusteluDao = new KeskusteluDao(database);
         Dao<Viesti, String> viestiDao = new ViestiDao(database, keskusteluDao);
 
@@ -66,8 +66,8 @@ public class Main {
         post("/", (req, res) -> {
 
             String alueNimi = req.queryParams("alue");
-            alueDao.insert(alueNimi);
-            alueet.add(alueDao.findOne(alueNimi));
+            int alueId = alueDao.insert(alueNimi);
+            alueet.add(alueDao.findOne(alueId));
             paivita(k, a);
             res.redirect("/");
             return "";
@@ -109,6 +109,10 @@ public class Main {
 
             int uudenId = keskusteluDao.insert(req.params(":id"), req.queryParams("otsikko"));
             keskustelut.add(keskusteluDao.findOne(uudenId));
+            
+            String uudenSisalto = viestiDao.insert1("" + uudenId, req.queryParams("sisalto"), req.queryParams("nimimerkki"));
+            viestit.add(viestiDao.findOne(uudenSisalto));
+            
             paivita(k, a);
             res.redirect("/alue/" + req.params(":id"));
             return "";
@@ -121,11 +125,14 @@ public class Main {
             ArrayList viestiLista = new ArrayList();
 
             // Muodostetaan keskustelun nimi otsikoksi html-templateen
-            String keskusteluOtsikko = "Keskustelu: ";
+            String keskusteluOtsikko = "";
             int keskusteluId = Integer.parseInt(req.params(":id"));
+            int alueId = 0;
             for (Keskustelu keskustelu : keskustelut) {
                 if (keskustelu.getId() == keskusteluId) {
-                    keskusteluOtsikko += keskustelu.getOtsikko();
+                    Keskustelualue alue = alueDao.findOne(keskustelu.getAlueId());
+                    alueId = alue.getId();
+                    keskusteluOtsikko += alue.getNimi() + " -> " + keskustelu.getOtsikko();
                 }
             }
 
@@ -142,6 +149,7 @@ public class Main {
 
             // Laitetaan tiedot mappiin ja annetaan thymeleafille
             map.put("keskusteluId", keskusteluId);
+            map.put("alueId", alueId);
             map.put("otsikko", keskusteluOtsikko);
             map.put("viestit", viestiLista);
 

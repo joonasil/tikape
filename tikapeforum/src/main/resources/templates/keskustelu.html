@@ -16,21 +16,20 @@
         <div style="background-color: #ffffff; box-shadow: 1px 1px 1px 1px #888888; width: 60%; margin: 0 auto; padding: 20px;">
 
             <div style="width: 90%; margin: 0 auto;">
-                <h1><em th:text="${alue}"></em></h1>
-                <a href="/">Palaa keskustelufoorumin pääsivulle</a>
+                <h1><em th:text="${otsikko}"></em></h1>
+                <a th:href="@{~/alue/} + ${alueId}">Palaa keskustelualueelle</a>
             </div>
 
             <table style="width: 90%; padding: 5px; margin: 0 auto;">
                 <tr>
-                    <td><h2>Keskustelu</h2></td>
                     <td><h2>Viesti</h2></td>
                     <td><h2>Nimimerkki</h2></td>
-
+                    <td><h2>Aika</h2></td>
                 </tr>
                 <tr th:each="viesti: ${viestit}">
-                    <td th:text="${viesti.getKeskusteluId()}"></td>
                     <td th:text="${viesti.getSisalto()}"></td>
                     <td th:text="${viesti.getNimim()}"></td>
+                    <td th:text="${viesti.getAika()}"></td>
                 </tr>
             </table>
 
@@ -38,9 +37,9 @@
                 <form method="POST" th:action="@{~/keskustelu/} + ${keskusteluId}">
                     <h2>Viestin lisäys</h2>
                     <p>Anna sisältö:</p>
-                    <input type="text" name="sisalto"></input>
+                    <input required="required" type="text" name="sisalto"></input>
                     <p>Anna nimimerkki:</p>
-                    <input type="text" name="nimimerkki"></input>
+                    <input required="required" type="text" name="nimimerkki"></input>
                     <input type="submit" value="Lisää viesti"></input>
                 </form>
             </div>

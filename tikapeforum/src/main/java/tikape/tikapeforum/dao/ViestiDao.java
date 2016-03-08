@@ -74,10 +74,6 @@ public class ViestiDao implements Dao<Viesti, String> {
     }
 
     @Override
-    public void delete(String key) throws SQLException {
-    }
-
-    @Override
     public String insert1(String... keys) throws SQLException {
 
         Date date = new Date();

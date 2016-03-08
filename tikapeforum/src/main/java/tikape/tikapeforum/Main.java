@@ -92,8 +92,6 @@ public class Main {
             // joiden alueId vastaa valittua aluetta
             for (Keskustelu keskustelu : keskustelut) {
                 if (keskustelu.getAlueId() == alueId) {
-                    keskustelu.getViestit().size();
-                    keskustelu.getViimeisin();
                     keskusteluLista.add(keskustelu);
                 }
             }

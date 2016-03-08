@@ -37,8 +37,7 @@ public class Main {
 
         AlueYhdistaja a = new AlueYhdistaja(alueet, keskustelut);
         a.yhdista();
-        
-        
+
         // KESKUSTELUALUEIDEN LISTAUS JA LISÄYS
         get("/", (req, res) -> {
 
@@ -51,13 +50,13 @@ public class Main {
                 alue.selvitaViimeisinViesti();
                 alueLista.add(alue);
             }
-            
+
             // Laitetaan tiedot mappiin ja annetaan thymeleafille
             map.put("alueet", alueLista);
 
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());;
-        
+
         // Lisätään annettujen tietojen mukainen keskustelualue ja palataan
         // foorumin pääsivulle
         post("/", (req, res) -> {
@@ -65,15 +64,14 @@ public class Main {
             String alueNimi = req.queryParams("alue");
             alueDao.insert(alueNimi);
             alueet.add(alueDao.findOne(alueNimi));
-            
+
             res.redirect("/");
             return "";
         });
-        
-        
+
         // KESKUSTELUALUEELLA OLEVIEN KESKUSTELUJEN LISTAUS JA LISÄYS
         get("/alue/:id", (req, res) -> {
-            
+
             HashMap map = new HashMap();
             ArrayList keskusteluLista = new ArrayList();
 
@@ -85,17 +83,17 @@ public class Main {
                     alueNimi += alue.getNimi();
                 }
             }
-            
+
             // Valitaan näytettäviksi vain ne keskustelut,
             // joiden alueId vastaa valittua aluetta
             for (Keskustelu keskustelu : keskustelut) {
                 if (keskustelu.getAlueId() == alueId) {
                     keskustelu.getViestit().size();
                     keskustelu.getViimeisin();
-                    keskusteluLista.add(keskustelu); 
+                    keskusteluLista.add(keskustelu);
                 }
             }
-            
+
             // Laitetaan tiedot mappiin ja annetaan thymeleafille
             map.put("alueId", alueId);
             map.put("alue", alueNimi);
@@ -103,17 +101,60 @@ public class Main {
 
             return new ModelAndView(map, "keskustelualue");
         }, new ThymeleafTemplateEngine());;
-        
-        // lisätään alueelle viesti ja palataan keskustelualueen sivulle
+
+        // lisätään alueelle keskustelu ja palataan keskustelualueen sivulle
         post("/alue/:id", (req, res) -> {
-            
+
             int uudenId = keskusteluDao.insert(req.params(":id"), req.queryParams("otsikko"));
             keskustelut.add(keskusteluDao.findOne(uudenId));
-            
+
             res.redirect("/alue/" + req.params(":id"));
-            return ""; 
+            return "";
+        });
+
+        // KESKUSTELUSSA OLEVIEN VIESTIEN LISTAUS JA LISÄYS
+        get("/keskustelu/:id", (req, res) -> {
+
+            HashMap map = new HashMap();
+            ArrayList viestiLista = new ArrayList();
+
+            // Muodostetaan keskustelun nimi otsikoksi html-templateen
+            String keskusteluOtsikko = "Keskustelu: ";
+            int keskusteluId = Integer.parseInt(req.params(":id"));
+            for (Keskustelu keskustelu : keskustelut) {
+                if (keskustelu.getId() == keskusteluId) {
+                    keskusteluOtsikko += keskustelu.getOtsikko();
+                }
+            }
+
+            // Valitaan näytettäviksi vain ne viestit,
+            // joiden keskusteluId vastaa valittua keskustelua
+            for (Viesti viesti : viestit) {
+                if (viesti.getKeskusteluId() == keskusteluId) {
+                    viesti.getKeskusteluId();
+                    viesti.getSisalto();
+                    viesti.getNimim();
+                    viestiLista.add(viesti);
+                }
+            }
+
+            // Laitetaan tiedot mappiin ja annetaan thymeleafille
+            map.put("keskusteluId", keskusteluId);
+            map.put("otsikko", keskusteluOtsikko);
+            map.put("viestit", viestiLista);
+
+            return new ModelAndView(map, "keskustelu");
+        }, new ThymeleafTemplateEngine());;
+
+        // lisätään keskusteluun viesti ja palataan keskustelun sivulle
+        post("/keskustelu/:id", (req, res) -> {
+
+            String uudenSisalto = viestiDao.insert1(req.params(":id"), req.queryParams("sisalto"), req.queryParams("nimimerkki"));
+            viestit.add(viestiDao.findOne(uudenSisalto));
+
+            res.redirect("/keskustelu/" + req.params(":id"));
+            return "";
         });
 
     }
-
 }

@@ -83,4 +83,9 @@ public class KeskustelualueDao implements Dao<Keskustelualue, String> {
         return 0;
     }
 
+    @Override
+    public String insert1(String... keys) throws SQLException {
+        return null;
+    }
+
 }

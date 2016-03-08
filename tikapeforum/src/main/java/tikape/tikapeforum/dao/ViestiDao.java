@@ -26,7 +26,7 @@ public class ViestiDao implements Dao<Viesti, String> {
     public Viesti findOne(String key) throws SQLException {
 
         Connection connection = this.database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE nimimerkki LIKE ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE sisalto LIKE ?");
 
         stmt.setObject(1, key);
 
@@ -78,22 +78,28 @@ public class ViestiDao implements Dao<Viesti, String> {
     }
 
     @Override
-    public int insert(String... keys) throws SQLException {
+    public String insert1(String... keys) throws SQLException {
 
         Date date = new Date();
         Timestamp aika = new Timestamp(date.getTime());
 
         Connection connection = this.database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Viesti(keskusteluId, sisalto, nimimerkki, aika)"
-                + "VALUES(1,?,?,\"" + aika + "\")");
+                + "VALUES(?,?,?,\"" + aika + "\")");
 
         stmt.setObject(1, keys[0]);
         stmt.setObject(2, keys[1]);
+        stmt.setObject(3, keys[2]);
         stmt.executeUpdate();
-
+        
         stmt.close();
         connection.close();
         
+        return keys[1];
+    }
+
+    @Override
+    public int insert(String... keys) throws SQLException {
         return 0;
     }
 

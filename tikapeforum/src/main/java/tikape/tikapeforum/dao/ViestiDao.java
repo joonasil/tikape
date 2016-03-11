@@ -106,7 +106,27 @@ public class ViestiDao implements Dao<Viesti, String> {
 
     @Override
     public List<Viesti> findTen(Integer key, int sivunro) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    Connection connection = this.database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE keskusteluId=? ORDER BY Viesti.aika DESC LIMIT 10 OFFSET ?");
+        stmt.setObject(1,key);
+        stmt.setObject(2, (sivunro-1)*10);
+        ResultSet rs = stmt.executeQuery();
+        List<Viesti> viestit = new ArrayList();
+
+        while (rs.next()) {
+
+            String sisalto = rs.getString("sisalto");
+            String nimimerkki = rs.getString("nimimerkki");
+            Timestamp aika = rs.getTimestamp("aika");
+
+            viestit.add(new Viesti(sisalto, nimimerkki, key, aika));
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return viestit;
     }
    
 

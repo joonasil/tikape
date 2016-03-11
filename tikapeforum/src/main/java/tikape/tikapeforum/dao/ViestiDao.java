@@ -98,5 +98,16 @@ public class ViestiDao implements Dao<Viesti, String> {
     public int insert(String... keys) throws SQLException {
         return 0;
     }
+//
+//    @Override
+//    public List<Viesti> liittyvatObjektit(Integer key) throws SQLException {
+//    return null;
+//    }
+
+    @Override
+    public List<Viesti> findTen(Integer key, int sivunro) throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+   
 
 }

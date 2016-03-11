@@ -31,7 +31,7 @@ public class Main {
         Database database = new Database("jdbc:sqlite:forum.db");
 
         Dao<Keskustelualue, Integer> alueDao = new KeskustelualueDao(database);
-        Dao<Keskustelu, Integer> keskusteluDao = new KeskusteluDao(database);
+        Dao<Keskustelu, Integer> keskusteluDao = new KeskusteluDao(database, alueDao);
         Dao<Viesti, String> viestiDao = new ViestiDao(database, keskusteluDao);
 
         List<Keskustelualue> alueet = alueDao.findAll();
@@ -77,7 +77,7 @@ public class Main {
         get("/alue/:id", (req, res) -> {
 
             HashMap map = new HashMap();
-            ArrayList keskusteluLista = new ArrayList();
+            List keskusteluLista = new ArrayList();
 
             // Muodostetaan keskustelualueen nimi otsikoksi html-templateen
             String alueNimi = "Keskustelualue: ";
@@ -90,12 +90,15 @@ public class Main {
 
             // Valitaan näytettäviksi vain ne keskustelut,
             // joiden alueId vastaa valittua aluetta
-            for (Keskustelu keskustelu : keskustelut) {
-                if (keskustelu.getAlueId() == alueId) {
-                    keskusteluLista.add(keskustelu);
-                }
-            }
-
+//            for(Keskustelu keskustelu : keskustelut) {
+//                if (keskustelu.getAlueId()==alueId) {
+//                    keskusteluLista.add(keskustelu);
+//                }
+//            }
+            keskusteluLista = keskusteluDao.findTen(alueId, 1);
+            a.setKeskustelut(keskusteluLista);
+            k.setKeskustelut(keskusteluLista);
+            paivita(k, a);
             // Laitetaan tiedot mappiin ja annetaan thymeleafille
             map.put("alueId", alueId);
             map.put("alue", alueNimi);
@@ -109,10 +112,10 @@ public class Main {
 
             int uudenId = keskusteluDao.insert(req.params(":id"), req.queryParams("otsikko"));
             keskustelut.add(keskusteluDao.findOne(uudenId));
-            
+
             String uudenSisalto = viestiDao.insert1("" + uudenId, req.queryParams("sisalto"), req.queryParams("nimimerkki"));
             viestit.add(viestiDao.findOne(uudenSisalto));
-            
+
             paivita(k, a);
             res.redirect("/alue/" + req.params(":id"));
             return "";
@@ -165,6 +168,6 @@ public class Main {
             res.redirect("/keskustelu/" + req.params(":id"));
             return "";
         });
-        
+
     }
 }

@@ -86,4 +86,13 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
         return null;
     }
 
+//    @Override
+//    public List<Keskustelualue> liittyvatObjektit(Integer key) throws SQLException {
+//        return null;
+//    }
+    @Override
+    public List<Keskustelualue> findTen(Integer key, int sivunro) throws SQLException {
+        return null;
+    }
+
 }

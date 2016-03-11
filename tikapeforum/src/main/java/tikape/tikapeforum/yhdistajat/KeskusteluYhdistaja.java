@@ -26,4 +26,9 @@ public class KeskusteluYhdistaja {
             }
         }
     }
+
+    public void setKeskustelut(List<Keskustelu> keskustelut) {
+        this.keskustelut = keskustelut;
+    }
+    
 }

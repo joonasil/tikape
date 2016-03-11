@@ -16,9 +16,12 @@ import tikape.tikapeforum.database.taulut.Viesti;
 public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
     private Database database;
+    private KeskustelualueDao alueDao;
 
-    public KeskusteluDao(Database database) {
+    public KeskusteluDao(Database database, Dao<Keskustelualue, Integer> alueDao) {
         this.database = database;
+        alueDao = alueDao;
+
     }
 
     @Override
@@ -92,5 +95,51 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     @Override
     public String insert1(String... keys) throws SQLException {
         return null;
+    }
+
+//    @Override
+//    public List<Keskustelu> liittyvatObjektit(Integer key) throws SQLException {
+//        Connection connection = this.database.getConnection();
+//        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelu WHERE alueId=?");
+//        stmt.setObject(1, key);
+//        ResultSet rs = stmt.executeQuery();
+//        List<Keskustelu> alueenKeskustelut = new ArrayList();
+//
+//        while (rs.next()) {
+//
+//            Integer id = rs.getInt("keskusteluId");
+//            String otsikko = rs.getString("otsikko");
+//
+//            alueenKeskustelut.add(new Keskustelu(otsikko, id, key));
+//        }
+//
+//        rs.close();
+//        stmt.close();
+//        connection.close();
+//
+//        return alueenKeskustelut;
+//    }
+    @Override
+    public List<Keskustelu> findTen(Integer key, int sivunro) throws SQLException {
+        Connection connection = this.database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelu LEFT JOIN Viesti ON Keskustelu.keskusteluId=Viesti.keskusteluId WHERE alueId=? GROUP BY Keskustelu.keskusteluId ORDER BY MIN(Viesti.aika) DESC LIMIT 10 OFFSET ?");
+        stmt.setObject(1,key);
+        stmt.setObject(2, (sivunro-1)*10);
+        ResultSet rs = stmt.executeQuery();
+        List<Keskustelu> keskustelut = new ArrayList();
+
+        while (rs.next()) {
+
+            Integer id = rs.getInt("keskusteluId");
+            String otsikko = rs.getString("otsikko");
+
+            keskustelut.add(new Keskustelu(otsikko, id, key));
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return keskustelut;
     }
 }

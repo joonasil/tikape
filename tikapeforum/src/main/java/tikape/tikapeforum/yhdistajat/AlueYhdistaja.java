@@ -28,4 +28,9 @@ public class AlueYhdistaja {
         }
     }
 
+    public void setKeskustelut(List<Keskustelu> keskustelut) {
+        this.keskustelut = keskustelut;
+    }
+    
+
 }

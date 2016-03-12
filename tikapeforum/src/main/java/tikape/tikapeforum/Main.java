@@ -19,7 +19,7 @@ import tikape.tikapeforum.yhdistajat.AlueYhdistaja;
 import tikape.tikapeforum.yhdistajat.KeskusteluYhdistaja;
 
 public class Main {
-
+    static int maara = 10;
     public static void paivita(KeskusteluYhdistaja k, AlueYhdistaja a) {
         k.yhdista();
         a.yhdista();
@@ -37,7 +37,7 @@ public class Main {
         List<Keskustelualue> alueet = alueDao.findAll();
         List<Keskustelu> keskustelut = keskusteluDao.findAll();
         List<Viesti> viestit = viestiDao.findAll();
-
+        
         KeskusteluYhdistaja k = new KeskusteluYhdistaja(keskustelut, viestit);
         AlueYhdistaja a = new AlueYhdistaja(alueet, keskustelut);
         paivita(k, a);
@@ -47,7 +47,11 @@ public class Main {
 
             HashMap map = new HashMap();
             ArrayList alueLista = new ArrayList();
-
+            
+            a.setKeskustelut(keskustelut);
+            k.setKeskustelut(keskustelut);
+            paivita(k, a);
+            
             // Valitaan näytettäviksi kaikki keskustelualueet
             for (Keskustelualue alue : alueet) {
                 alue.selvitaViestienMaara();
@@ -123,7 +127,7 @@ public class Main {
 
         // KESKUSTELUSSA OLEVIEN VIESTIEN LISTAUS JA LISÄYS
         get("/keskustelu/:id", (req, res) -> {
-
+            
             HashMap map = new HashMap();
             ArrayList viestiLista = new ArrayList();
 
@@ -136,6 +140,7 @@ public class Main {
                     Keskustelualue alue = alueDao.findOne(keskustelu.getAlueId());
                     alueId = alue.getId();
                     keskusteluOtsikko += alue.getNimi() + " -> " + keskustelu.getOtsikko();
+                    break;
                 }
             }
 
@@ -155,13 +160,20 @@ public class Main {
             map.put("alueId", alueId);
             map.put("otsikko", keskusteluOtsikko);
             map.put("viestit", viestiLista);
-
+            map.put("maara", Integer.toString(maara));
             return new ModelAndView(map, "keskustelu");
         }, new ThymeleafTemplateEngine());;
 
+        
+        post("/viesteja/:id", (req, res) -> {
+            maara = Integer.parseInt(req.queryParams("lista"));
+            System.out.println(maara);
+            res.redirect("/keskustelu/" + req.params(":id"));
+           return""; 
+        });
+        
         // lisätään keskusteluun viesti ja palataan keskustelun sivulle
         post("/keskustelu/:id", (req, res) -> {
-
             String uudenSisalto = viestiDao.insert1(req.params(":id"), req.queryParams("sisalto"), req.queryParams("nimimerkki"));
             viestit.add(viestiDao.findOne(uudenSisalto));
             paivita(k, a);

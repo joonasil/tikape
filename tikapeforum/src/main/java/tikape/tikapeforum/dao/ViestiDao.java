@@ -12,6 +12,7 @@ import tikape.tikapeforum.database.Database;
 import tikape.tikapeforum.database.taulut.Keskustelu;
 import tikape.tikapeforum.database.taulut.Viesti;
 
+
 public class ViestiDao implements Dao<Viesti, String> {
 
     private Database database;

@@ -13,6 +13,7 @@ import tikape.tikapeforum.database.taulut.Keskustelu;
 import tikape.tikapeforum.database.taulut.Keskustelualue;
 import tikape.tikapeforum.database.taulut.Viesti;
 
+
 public class KeskusteluDao implements Dao<Keskustelu, Integer> {
 
     private Database database;

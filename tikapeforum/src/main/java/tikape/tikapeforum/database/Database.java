@@ -1,7 +1,6 @@
 
 package tikape.tikapeforum.database;
 
-import tikape.tikapeforum.collectors.Collector;
 import java.sql.*;
 import java.util.*;
 

@@ -25,30 +25,30 @@
                     <td><h2>Viesti</h2></td>
                     <td><h2>Nimimerkki</h2></td>
                     <td><h2>Aika</h2></td>
-                    
-                    <td>
-                        <p>Näytä</p>
-                        <form method="POST" th:action="@{~/viesteja/} + ${keskusteluId}">   
-   
-                            <select name="lista" id ="qwerty" onchange="this.form.submit()" onload="this.getElementById().selected=true">
-                                <option value="10" id="10">10</option>
-                                <option value="20" id="20">20</option>
-                                
-                            </select>
-                        </form>
-                        
-                        <p>viestiä</p>
-                    </td>
                 </tr>
                 <tr th:each="viesti: ${viestit}">
                     <td th:text="${viesti.getSisalto()}"></td>
                     <td th:text="${viesti.getNimim()}"></td>
                     <td th:text="${viesti.getAika()}"></td>
-                    <td th:text="${maara}"></td>
                 </tr>
+                                
+                <tr>
+                    <td>
+                        <br />
+                        <p th:text="${viestienMaara}"></p>
+                        <form method="POST" th:action="@{~/viesteja/enemman/} + ${keskusteluId}">
+                            <input type="submit" value="Näytä enemmän viestejä"></input><br/>
+                        </form>
+                        <form method="POST" th:action="@{~/viesteja/vahemman/} + ${keskusteluId}">
+                            <input type="submit" value="Näytä 10 uusinta viestiä"></input>
+                        </form>
+                    </td>
+                </tr>
+                
             </table>
 
             <div style="width: 90%; margin: 0 auto; padding-bottom: 20px; padding-top: 20px;">
+
                 <form method="POST" th:action="@{~/keskustelu/} + ${keskusteluId}">
                     <h2>Viestin lisäys</h2>
                     <p>Anna sisältö:</p>
@@ -57,7 +57,10 @@
                     <input required="required" type="text" name="nimimerkki"></input>
                     <input type="submit" value="Lisää viesti"></input>
                 </form>
+
             </div>
+            
+                                    
 
         </div>
 

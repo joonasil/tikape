@@ -154,20 +154,37 @@ public class Main {
                     viestiLista.add(viesti);
                 }
             }
+            
+            //Rajoitetaan viestien määrä
+            ArrayList naytettavatViestit = new ArrayList();
+            for (int i = 0; i < maara; i++) {
+                if (i > viestiLista.size() - 1) {
+                    break;
+                }
+                naytettavatViestit.add(viestiLista.get(i));
+            }
+            String viestienMaara = "Viestejä näytetään: " + naytettavatViestit.size();
 
             // Laitetaan tiedot mappiin ja annetaan thymeleafille
             map.put("keskusteluId", keskusteluId);
             map.put("alueId", alueId);
             map.put("otsikko", keskusteluOtsikko);
-            map.put("viestit", viestiLista);
-            map.put("maara", Integer.toString(maara));
+            map.put("viestit", naytettavatViestit);
+            map.put("viestienMaara", viestienMaara);
             return new ModelAndView(map, "keskustelu");
         }, new ThymeleafTemplateEngine());;
 
+        // Kasvatetaan näytettävien viestien määrää käyttäjän komennosta
+        post("/viesteja/enemman/:id", (req, res) -> {
+            maara += 10;
+            res.redirect("/keskustelu/" + req.params(":id"));
+           return""; 
+        });
         
-        post("/viesteja/:id", (req, res) -> {
-            maara = Integer.parseInt(req.queryParams("lista"));
-            System.out.println(maara);
+        // Jos viestejä näytetään yli 10, vähennetään näytettävien viestien määrää
+        // käyttäjän komennosta
+        post("/viesteja/vahemman/:id", (req, res) -> {
+            maara = 10;
             res.redirect("/keskustelu/" + req.params(":id"));
            return""; 
         });

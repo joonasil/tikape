@@ -3,6 +3,7 @@ package tikape.tikapeforum.dao;
 
 import java.sql.SQLException;
 import java.util.List;
+import tikape.tikapeforum.database.taulut.Viesti;
 
 public interface Dao<T, K> {
     
@@ -10,11 +11,12 @@ public interface Dao<T, K> {
 
     List<T> findAll() throws SQLException;
     
-    //Insertit tarvii aina Stringejä, tässä nolla tai enempi.
     int insert(String...keys) throws SQLException; 
-    // Tässä tehty kauheuksia jotta saataisiin insertistä ulos viestin sisältö...
-    String insert1(String...keys) throws SQLException; 
 
-   //List<T> liittyvatObjektit(Integer key) throws SQLException;
+    String insert1(String...keys) throws SQLException; 
+    
+    Viesti insert2(String... keys) throws SQLException;
+
     List<T> findTen(Integer key, int sivunro) throws SQLException;
+    
 }

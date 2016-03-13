@@ -22,7 +22,6 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
     public KeskusteluDao(Database database, Dao<Keskustelualue, Integer> alueDao) {
         this.database = database;
         alueDao = alueDao;
-
     }
 
     @Override
@@ -98,28 +97,6 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         return null;
     }
 
-//    @Override
-//    public List<Keskustelu> liittyvatObjektit(Integer key) throws SQLException {
-//        Connection connection = this.database.getConnection();
-//        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelu WHERE alueId=?");
-//        stmt.setObject(1, key);
-//        ResultSet rs = stmt.executeQuery();
-//        List<Keskustelu> alueenKeskustelut = new ArrayList();
-//
-//        while (rs.next()) {
-//
-//            Integer id = rs.getInt("keskusteluId");
-//            String otsikko = rs.getString("otsikko");
-//
-//            alueenKeskustelut.add(new Keskustelu(otsikko, id, key));
-//        }
-//
-//        rs.close();
-//        stmt.close();
-//        connection.close();
-//
-//        return alueenKeskustelut;
-//    }
     @Override
     public List<Keskustelu> findTen(Integer key, int sivunro) throws SQLException {
         Connection connection = this.database.getConnection();
@@ -142,5 +119,10 @@ public class KeskusteluDao implements Dao<Keskustelu, Integer> {
         connection.close();
 
         return keskustelut;
+    }
+
+    @Override
+    public Viesti insert2(String... keys) throws SQLException {
+        return null;
     }
 }

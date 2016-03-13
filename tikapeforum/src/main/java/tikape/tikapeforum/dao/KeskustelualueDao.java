@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import tikape.tikapeforum.database.Database;
 import tikape.tikapeforum.database.taulut.Keskustelualue;
@@ -86,13 +87,14 @@ public class KeskustelualueDao implements Dao<Keskustelualue, Integer> {
     public String insert1(String... keys) throws SQLException {
         return null;
     }
-
-//    @Override
-//    public List<Keskustelualue> liittyvatObjektit(Integer key) throws SQLException {
-//        return null;
-//    }
+    
     @Override
     public List<Keskustelualue> findTen(Integer key, int sivunro) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public Viesti insert2(String... keys) throws SQLException {
         return null;
     }
 

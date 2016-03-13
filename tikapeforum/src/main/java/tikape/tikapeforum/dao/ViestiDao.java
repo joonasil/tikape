@@ -73,9 +73,9 @@ public class ViestiDao implements Dao<Viesti, String> {
 
         return viestit;
     }
-
+      
     @Override
-    public String insert1(String... keys) throws SQLException {
+    public Viesti insert2(String... keys) throws SQLException {
 
         Date date = new Date();
         Timestamp aika = new Timestamp(date.getTime());
@@ -89,45 +89,27 @@ public class ViestiDao implements Dao<Viesti, String> {
         stmt.setObject(3, keys[2]);
         stmt.executeUpdate();
         
+        Viesti uusi = new Viesti(keys[1], keys[2], Integer.parseInt(keys[0]), aika);
+        
         stmt.close();
         connection.close();
         
-        return keys[1];
+        return uusi;
     }
 
     @Override
     public int insert(String... keys) throws SQLException {
         return 0;
     }
-//
-//    @Override
-//    public List<Viesti> liittyvatObjektit(Integer key) throws SQLException {
-//    return null;
-//    }
+    
+    @Override
+    public String insert1(String... keys) throws SQLException {
+        return "";
+    }
 
     @Override
     public List<Viesti> findTen(Integer key, int sivunro) throws SQLException {
-    Connection connection = this.database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE keskusteluId=? ORDER BY Viesti.aika DESC LIMIT 10 OFFSET ?");
-        stmt.setObject(1,key);
-        stmt.setObject(2, (sivunro-1)*10);
-        ResultSet rs = stmt.executeQuery();
-        List<Viesti> viestit = new ArrayList();
-
-        while (rs.next()) {
-
-            String sisalto = rs.getString("sisalto");
-            String nimimerkki = rs.getString("nimimerkki");
-            Timestamp aika = rs.getTimestamp("aika");
-
-            viestit.add(new Viesti(sisalto, nimimerkki, key, aika));
-        }
-
-        rs.close();
-        stmt.close();
-        connection.close();
-
-        return viestit;
+        return null;
     }
    
 

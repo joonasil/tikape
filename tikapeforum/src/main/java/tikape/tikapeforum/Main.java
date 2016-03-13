@@ -19,11 +19,13 @@ import tikape.tikapeforum.yhdistajat.AlueYhdistaja;
 import tikape.tikapeforum.yhdistajat.KeskusteluYhdistaja;
 
 public class Main {
-    static int maara = 10;
+    
+    static int maara = 10;    
+    static HtmlEncoder htmlEncoder = new HtmlEncoder();
+    
     public static void paivita(KeskusteluYhdistaja k, AlueYhdistaja a) {
         k.yhdista();
         a.yhdista();
-
     }
 
     public static void main(String[] args) throws Exception {
@@ -69,7 +71,7 @@ public class Main {
         // foorumin pääsivulle
         post("/", (req, res) -> {
 
-            String alueNimi = req.queryParams("alue");
+            String alueNimi = htmlEncoder.escapeHtml(req.queryParams("alue"));
             int alueId = alueDao.insert(alueNimi);
             alueet.add(alueDao.findOne(alueId));
             paivita(k, a);
@@ -94,11 +96,6 @@ public class Main {
 
             // Valitaan näytettäviksi vain ne keskustelut,
             // joiden alueId vastaa valittua aluetta
-//            for(Keskustelu keskustelu : keskustelut) {
-//                if (keskustelu.getAlueId()==alueId) {
-//                    keskusteluLista.add(keskustelu);
-//                }
-//            }
             keskusteluLista = keskusteluDao.findTen(alueId, 1);
             a.setKeskustelut(keskusteluLista);
             k.setKeskustelut(keskusteluLista);
@@ -113,12 +110,15 @@ public class Main {
 
         // lisätään alueelle keskustelu ja palataan keskustelualueen sivulle
         post("/alue/:id", (req, res) -> {
-
-            int uudenId = keskusteluDao.insert(req.params(":id"), req.queryParams("otsikko"));
+            
+            String otsikko = htmlEncoder.escapeHtml(req.queryParams("otsikko"));
+            int uudenId = keskusteluDao.insert(req.params(":id"), otsikko);
             keskustelut.add(keskusteluDao.findOne(uudenId));
-
-            String uudenSisalto = viestiDao.insert1("" + uudenId, req.queryParams("sisalto"), req.queryParams("nimimerkki"));
-            viestit.add(viestiDao.findOne(uudenSisalto));
+            
+            String sisalto = htmlEncoder.escapeHtml(req.queryParams("sisalto"));
+            String nimimerkki = htmlEncoder.escapeHtml(req.queryParams("nimimerkki"));
+            Viesti uusi = viestiDao.insert2("" + uudenId, sisalto, nimimerkki);
+            viestit.add(uusi);
 
             paivita(k, a);
             res.redirect("/alue/" + req.params(":id"));
@@ -154,6 +154,9 @@ public class Main {
                     viestiLista.add(viesti);
                 }
             }
+            k.setKeskustelut(keskustelut);
+            k.setViestit(viestit);
+            paivita(k, a);
             
             //Rajoitetaan viestien määrä
             ArrayList naytettavatViestit = new ArrayList();
@@ -191,8 +194,11 @@ public class Main {
         
         // lisätään keskusteluun viesti ja palataan keskustelun sivulle
         post("/keskustelu/:id", (req, res) -> {
-            String uudenSisalto = viestiDao.insert1(req.params(":id"), req.queryParams("sisalto"), req.queryParams("nimimerkki"));
-            viestit.add(viestiDao.findOne(uudenSisalto));
+            
+            String sisalto = htmlEncoder.escapeHtml(req.queryParams("sisalto"));
+            String nimimerkki = htmlEncoder.escapeHtml(req.queryParams("nimimerkki"));
+            Viesti uusi = viestiDao.insert2(req.params(":id"), sisalto, nimimerkki);
+            viestit.add(uusi);
             paivita(k, a);
             res.redirect("/keskustelu/" + req.params(":id"));
             return "";

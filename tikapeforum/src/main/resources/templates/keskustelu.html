@@ -20,6 +20,17 @@
                 <a th:href="@{~/alue/} + ${alueId}">Palaa keskustelualueelle</a>
             </div>
             
+            <br />
+            <div style="width: 90%; margin: 0 auto;">
+                <p th:text="${viestienMaara}"></p>
+                <form method="POST" th:action="@{~/viesteja/enemman/} + ${keskusteluId}">
+                    <input type="submit" value="Näytä enemmän viestejä"></input><br/>
+                </form>
+                <form method="POST" th:action="@{~/viesteja/vahemman/} + ${keskusteluId}">
+                    <input type="submit" value="Näytä 10 uusinta viestiä"></input>
+                </form>
+            </div>
+            
             <table style="width: 90%; padding: 5px; margin: 0 auto;">
                 <tr>
                     <td><h2>Viesti</h2></td>
@@ -30,19 +41,6 @@
                     <td th:text="${viesti.getSisalto()}"></td>
                     <td th:text="${viesti.getNimim()}"></td>
                     <td th:text="${viesti.getAika()}"></td>
-                </tr>
-                                
-                <tr>
-                    <td>
-                        <br />
-                        <p th:text="${viestienMaara}"></p>
-                        <form method="POST" th:action="@{~/viesteja/enemman/} + ${keskusteluId}">
-                            <input type="submit" value="Näytä enemmän viestejä"></input><br/>
-                        </form>
-                        <form method="POST" th:action="@{~/viesteja/vahemman/} + ${keskusteluId}">
-                            <input type="submit" value="Näytä 10 uusinta viestiä"></input>
-                        </form>
-                    </td>
                 </tr>
                 
             </table>

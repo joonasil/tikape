@@ -31,4 +31,8 @@ public class KeskusteluYhdistaja {
         this.keskustelut = keskustelut;
     }
     
+    public void setViestit(List<Viesti> viestit) {
+        this.viestit = viestit;
+    }
+    
 }
